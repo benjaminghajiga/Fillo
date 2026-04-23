@@ -1,0 +1,104 @@
+.portfolio-section {
+    background-color: #43513a;
+    /* Dark olive green from the image */
+    padding: 6rem 0;
+    font-family: 'Outfit', sans-serif;
+}
+
+.portfolio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+}
+
+.portfolio-header .title.text-white {
+    color: #ffffff;
+    margin-bottom: 0;
+    font-size: 2.5rem;
+    line-height: 1.2;
+}
+
+.portfolio-btn {
+    background-color: #E6EE9C;
+    /* Light greenish-yellow button color */
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.portfolio-btn::before {
+    content: '⌘';
+    /* Placeholder icon */
+    font-size: 1.2rem;
+}
+
+.portfolio-btn:hover {
+    background-color: #D4E157;
+    transform: translateY(-2px);
+}
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.portfolio-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    height: 400px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.portfolio-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.portfolio-card:hover .portfolio-img {
+    transform: scale(1.05);
+}
+
+.portfolio-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: rgba(67, 81, 58, 0.8);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    backdrop-filter: blur(4px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .portfolio-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .portfolio-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .portfolio-card {
+        height: 300px;
+    }
+}
