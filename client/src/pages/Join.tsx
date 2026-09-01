@@ -23,7 +23,12 @@ export default function Join() {
   useEffect(() => {
     let active = true;
     void supabase.auth.getSession().then(({ data }) => {
-      if (active && data.session) navigate("/dashboard");
+      if (active && data.session) {
+        const user = data.session.user;
+        if (user.user_metadata?.role === "buyer" && !user.email_confirmed_at) navigate("/verify-email");
+        else if (!user.user_metadata?.onboarding_complete) navigate("/onboarding");
+        else navigate("/dashboard");
+      }
     });
     return () => { active = false; };
   }, [navigate]);
@@ -53,13 +58,14 @@ export default function Join() {
         });
         if (signUpError) throw signUpError;
         if (!data.user) throw new Error("We could not create your account. Please try again.");
-        if (!requiresVerification && data.session) { navigate("/dashboard"); return; }
+        if (!requiresVerification && data.session) { navigate("/onboarding"); return; }
         setVerificationRequired(requiresVerification);
         setSubmitted(true);
       } else {
         const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
         if (signInError) throw signInError;
-        navigate("/dashboard");
+        const { data: { user } } = await supabase.auth.getUser();
+        navigate(user?.user_metadata?.onboarding_complete ? "/dashboard" : "/onboarding");
         return;
       }
     } catch (submissionError) {
