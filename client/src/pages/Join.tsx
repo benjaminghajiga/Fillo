@@ -47,7 +47,7 @@ export default function Join() {
         if (!role) { setError("Choose how you’re joining Fillo."); setLoading(false); return; }
         const { data, error: signUpError } = await supabase.auth.signUp({
           email, password,
-          options: { data: { full_name: fullName, role } },
+          options: { data: { full_name: fullName, role }, emailRedirectTo: `${window.location.origin}/verify-email` },
         });
         if (signUpError) throw signUpError;
         if (!data.user) throw new Error("We could not create your account. Please try again.");

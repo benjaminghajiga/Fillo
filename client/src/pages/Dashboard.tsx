@@ -31,6 +31,7 @@ export default function Dashboard() {
     setLoading(true); setError("");
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { navigate("/join"); return; }
+    if (!user.email_confirmed_at) { navigate("/verify-email"); return; }
     const [{ data: profileData, error: profileError }, { data: listingsData, error: listingsError }, { data: inquiriesData, error: inquiriesError }] = await Promise.all([
       supabase.from("profiles").select("id, full_name, role, created_at").eq("id", user.id).maybeSingle(),
       supabase.from("listings").select("id, seller_id, product, origin, quantity, unit, price, status, created_at").order("created_at", { ascending: false }).limit(50),

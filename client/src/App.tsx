@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Join from "./pages/Join";
 import Dashboard from "./pages/Dashboard";
 import ResetPassword from "./pages/ResetPassword";
+import VerifyEmail from "./pages/VerifyEmail";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -17,6 +18,7 @@ function Router() {
       <Route path={"/join"} component={Join} />
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/reset-password"} component={ResetPassword} />
+      <Route path={"/verify-email"} component={VerifyEmail} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
