@@ -34,7 +34,7 @@ export default function Join() {
   const sendReset = async () => {
     if (!email) { setError("Enter your email first so we know where to send the reset link."); return; }
     setResetLoading(true); setError(""); setNotice("");
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/join` });
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` });
     if (resetError) setError(resetError.message);
     else setNotice("Password reset instructions are on their way.");
     setResetLoading(false);
