@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, Eye, EyeOff, Leaf, Loader2, ShieldCheck, Sprout } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { useLocation } from "wouter";
 
 type Role = "buyer" | "supplier" | "logistics";
 
 export default function Join() {
+  const [, navigate] = useLocation();
   const [mode, setMode] = useState<"signin" | "signup">("signup");
   const [showPassword, setShowPassword] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -16,6 +18,14 @@ export default function Join() {
   const [role, setRole] = useState<Role | "">("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    void supabase.auth.getSession().then(({ data }) => {
+      if (active && data.session) navigate("/dashboard");
+    });
+    return () => { active = false; };
+  }, [navigate]);
 
   const changeMode = (nextMode: "signin" | "signup") => {
     setMode(nextMode); setSubmitted(false); setError(""); setNotice("");
@@ -45,10 +55,12 @@ export default function Join() {
       } else {
         const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
         if (signInError) throw signInError;
-        setSubmitted(true);
+        navigate("/dashboard");
+        return;
       }
     } catch (submissionError) {
-      setError(submissionError instanceof Error ? submissionError.message : "Something went wrong. Please try again.");
+      const message = submissionError instanceof Error ? submissionError.message : "Something went wrong. Please try again.";
+      setError(message.includes("already registered") ? "An account with this email already exists. Switch to Sign in instead." : message);
     } finally { setLoading(false); }
   };
 
