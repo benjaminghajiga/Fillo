@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 import { Component, ReactNode } from "react";
+import { Sentry } from "@/lib/monitoring";
 
 interface Props {
   children: ReactNode;
@@ -19,6 +20,14 @@ class ErrorBoundary extends Component<Props, State> {
 
   static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    Sentry.withScope((scope) => {
+      scope.setTag("error_boundary", "app");
+      scope.setContext("react", { componentStack: info.componentStack });
+      Sentry.captureException(error);
+    });
   }
 
   render() {
