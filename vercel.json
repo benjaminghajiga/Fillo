@@ -2,5 +2,6 @@
   "buildCommand": "pnpm build",
   "outputDirectory": "dist/public",
   "framework": "vite",
-  "installCommand": "pnpm install --frozen-lockfile"
+  "installCommand": "pnpm install --frozen-lockfile",
+  "rewrites": [{ "source": "/((?!assets/|favicon.ico|robots.txt|__manus__/).*)", "destination": "/index.html" }]
 }
